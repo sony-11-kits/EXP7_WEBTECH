@@ -1,0 +1,1337 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>ASTRA | 3D Astrology</title>
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+
+            font-family: "Segoe UI", Arial, sans-serif;
+
+            color: white;
+
+            min-height: 100vh;
+
+            overflow-x: hidden;
+
+            background:
+                radial-gradient(circle at 50% 20%,
+                rgba(180,180,255,0.20),
+                transparent 25%),
+
+                radial-gradient(circle at 20% 70%,
+                rgba(130,130,180,0.15),
+                transparent 25%),
+
+                linear-gradient(
+                    135deg,
+                    #03040a,
+                    #10121c,
+                    #1a1b29,
+                    #07080e
+                );
+
+            perspective: 1200px;
+        }
+
+
+        /* =========================
+           MOVING STARS
+        ========================= */
+
+        .stars,
+        .stars2,
+        .stars3 {
+
+            position: fixed;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 100%;
+
+            pointer-events: none;
+
+            z-index: 0;
+        }
+
+        .stars {
+
+            background-image:
+                radial-gradient(white 1px, transparent 1px);
+
+            background-size: 80px 80px;
+
+            opacity: 0.45;
+
+            animation: moveStars 25s linear infinite;
+        }
+
+        .stars2 {
+
+            background-image:
+                radial-gradient(#d8d8ff 1px, transparent 1px);
+
+            background-size: 130px 130px;
+
+            opacity: 0.35;
+
+            animation: moveStars 40s linear infinite reverse;
+        }
+
+        .stars3 {
+
+            background-image:
+                radial-gradient(#ffffff 1px, transparent 1px);
+
+            background-size: 200px 200px;
+
+            opacity: 0.5;
+        }
+
+        @keyframes moveStars {
+
+            from {
+                transform: translateY(0);
+            }
+
+            to {
+                transform: translateY(-200px);
+            }
+
+        }
+
+
+        /* =========================
+           SHOOTING STAR
+        ========================= */
+
+        .shooting-star {
+
+            position: fixed;
+
+            width: 120px;
+            height: 2px;
+
+            background: linear-gradient(
+                90deg,
+                white,
+                transparent
+            );
+
+            top: 15%;
+            left: -150px;
+
+            transform: rotate(-25deg);
+
+            opacity: 0;
+
+            animation: shooting 7s linear infinite;
+
+            z-index: 2;
+        }
+
+        @keyframes shooting {
+
+            0% {
+                left: -150px;
+                top: 10%;
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            30% {
+                left: 110%;
+                top: 45%;
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 0;
+            }
+
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        header {
+
+            position: relative;
+
+            z-index: 5;
+
+            text-align: center;
+
+            padding: 35px 20px 10px;
+        }
+
+        .logo {
+
+            font-size: 15px;
+
+            letter-spacing: 8px;
+
+            color: #cfd1d8;
+
+            margin-bottom: 12px;
+        }
+
+        header h1 {
+
+            font-size: 65px;
+
+            letter-spacing: 12px;
+
+            font-weight: 300;
+
+            background: linear-gradient(
+                120deg,
+                #ffffff,
+                #858993,
+                #ffffff,
+                #555963,
+                #ffffff
+            );
+
+            -webkit-background-clip: text;
+
+            -webkit-text-fill-color: transparent;
+
+            text-shadow:
+                0 0 25px rgba(255,255,255,0.15);
+        }
+
+        header p {
+
+            color: #aaaeb9;
+
+            letter-spacing: 4px;
+
+            margin-top: 5px;
+
+            font-size: 12px;
+        }
+
+
+        /* =========================
+           MOON
+        ========================= */
+
+        .moon-area {
+
+            height: 300px;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            position: relative;
+
+            z-index: 2;
+        }
+
+        .moon {
+
+            width: 170px;
+            height: 170px;
+
+            border-radius: 50%;
+
+            background:
+
+                radial-gradient(
+                    circle at 35% 30%,
+                    #ffffff,
+                    #d7d9df 45%,
+                    #8c9099 75%,
+                    #555861
+                );
+
+            box-shadow:
+
+                0 0 25px #ffffff,
+                0 0 60px rgba(220,220,255,0.5),
+                0 0 120px rgba(160,160,200,0.3);
+
+            animation: moonFloat 4s ease-in-out infinite;
+
+            position: relative;
+        }
+
+        .moon::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 45px;
+            height: 45px;
+
+            border-radius: 50%;
+
+            background: rgba(100,100,110,0.18);
+
+            top: 35px;
+            left: 40px;
+
+            box-shadow:
+                55px 30px 0 12px rgba(100,100,110,0.12),
+                20px 75px 0 8px rgba(100,100,110,0.15);
+        }
+
+        @keyframes moonFloat {
+
+            0%,100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+
+        }
+
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .main {
+
+            position: relative;
+
+            z-index: 5;
+
+            width: 90%;
+
+            max-width: 1150px;
+
+            margin: auto;
+
+            text-align: center;
+        }
+
+        .subtitle {
+
+            color: #aeb2bd;
+
+            letter-spacing: 3px;
+
+            font-size: 13px;
+
+            margin-bottom: 25px;
+        }
+
+
+        /* =========================
+           3D ZODIAC WHEEL
+        ========================= */
+
+        .wheel {
+
+            width: 500px;
+            height: 500px;
+
+            max-width: 85vw;
+            max-height: 85vw;
+
+            margin: auto;
+
+            position: relative;
+
+            border-radius: 50%;
+
+            border:
+
+                1px solid
+                rgba(255,255,255,0.35);
+
+            box-shadow:
+
+                0 0 25px rgba(255,255,255,0.12),
+
+                inset 0 0 50px
+                rgba(255,255,255,0.05);
+
+            transform-style: preserve-3d;
+
+            animation: rotateWheel 40s linear infinite;
+
+            transition: transform 0.6s ease;
+        }
+
+        @keyframes rotateWheel {
+
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+
+        }
+
+
+        /* inner rings */
+
+        .wheel::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 75%;
+            height: 75%;
+
+            left: 12.5%;
+            top: 12.5%;
+
+            border-radius: 50%;
+
+            border:
+                1px solid
+                rgba(255,255,255,0.25);
+
+            box-shadow:
+                0 0 25px rgba(255,255,255,0.1);
+        }
+
+        .wheel::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 48%;
+            height: 48%;
+
+            left: 26%;
+            top: 26%;
+
+            border-radius: 50%;
+
+            border:
+                1px solid
+                rgba(255,255,255,0.25);
+
+        }
+
+
+        /* Zodiac buttons */
+
+        .zodiac {
+
+            position: absolute;
+
+            width: 70px;
+            height: 70px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            align-items: center;
+
+            cursor: pointer;
+
+            background:
+
+                radial-gradient(
+                    circle,
+                    #555862,
+                    #191b23
+                );
+
+            border:
+
+                1px solid
+                rgba(255,255,255,0.45);
+
+            box-shadow:
+
+                0 0 15px
+                rgba(255,255,255,0.15);
+
+            transition: 0.4s;
+
+            animation:
+                counterRotate 40s linear infinite;
+
+            z-index: 10;
+        }
+
+        @keyframes counterRotate {
+
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(-360deg);
+            }
+
+        }
+
+        .zodiac:hover {
+
+            transform: scale(1.3);
+
+            background:
+                radial-gradient(
+                    circle,
+                    #ffffff,
+                    #777b85
+                );
+
+            color: #111;
+
+            box-shadow:
+
+                0 0 25px white,
+                0 0 50px
+                rgba(255,255,255,0.4);
+        }
+
+        .zodiac .symbol {
+
+            font-size: 28px;
+        }
+
+        .zodiac small {
+
+            font-size: 8px;
+
+            letter-spacing: 1px;
+        }
+
+
+        /* positions */
+
+        .z1  { top: -35px; left: calc(50% - 35px); }
+        .z2  { top: 20px; right: 95px; }
+        .z3  { top: 105px; right: 20px; }
+        .z4  { top: calc(50% - 35px); right: -35px; }
+        .z5  { bottom: 105px; right: 20px; }
+        .z6  { bottom: 20px; right: 95px; }
+        .z7  { bottom: -35px; left: calc(50% - 35px); }
+        .z8  { bottom: 20px; left: 95px; }
+        .z9  { bottom: 105px; left: 20px; }
+        .z10 { top: calc(50% - 35px); left: -35px; }
+        .z11 { top: 105px; left: 20px; }
+        .z12 { top: 20px; left: 95px; }
+
+
+        /* =========================
+           CENTER
+        ========================= */
+
+        .center {
+
+            position: absolute;
+
+            top: 50%;
+
+            left: 50%;
+
+            transform:
+                translate(-50%, -50%);
+
+            width: 190px;
+            height: 190px;
+
+            border-radius: 50%;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            align-items: center;
+
+            background:
+
+                radial-gradient(
+                    circle,
+                    #292c36,
+                    #08090e
+                );
+
+            border:
+
+                1px solid
+                rgba(255,255,255,0.45);
+
+            box-shadow:
+
+                0 0 30px
+                rgba(255,255,255,0.2),
+
+                inset 0 0 30px
+                rgba(255,255,255,0.08);
+
+            z-index: 20;
+        }
+
+        #centerSymbol {
+
+            font-size: 50px;
+
+            text-shadow:
+                0 0 15px white;
+        }
+
+        #centerName {
+
+            margin-top: 8px;
+
+            letter-spacing: 3px;
+
+            font-size: 16px;
+        }
+
+        #centerHint {
+
+            color: #9fa3ad;
+
+            font-size: 10px;
+
+            margin-top: 7px;
+        }
+
+
+        /* =========================
+           HOROSCOPE PANEL
+        ========================= */
+
+        .horoscope {
+
+            margin: 80px auto 50px;
+
+            max-width: 750px;
+
+            padding: 40px;
+
+            position: relative;
+
+            background:
+
+                linear-gradient(
+                    135deg,
+                    rgba(255,255,255,0.12),
+                    rgba(255,255,255,0.03)
+                );
+
+            border:
+
+                1px solid
+                rgba(255,255,255,0.3);
+
+            border-radius: 25px;
+
+            backdrop-filter: blur(15px);
+
+            box-shadow:
+
+                0 20px 60px
+                rgba(0,0,0,0.4);
+        }
+
+        .horoscope h2 {
+
+            font-size: 14px;
+
+            letter-spacing: 5px;
+
+            color: #aeb2bd;
+
+            margin-bottom: 15px;
+        }
+
+        #horoscopeTitle {
+
+            font-size: 35px;
+
+            font-weight: 300;
+
+            margin-bottom: 18px;
+
+            text-shadow:
+                0 0 15px
+                rgba(255,255,255,0.4);
+        }
+
+        #message {
+
+            color: #c8cad0;
+
+            line-height: 1.8;
+
+            font-size: 15px;
+
+            min-height: 60px;
+        }
+
+        .reveal {
+
+            margin-top: 25px;
+
+            padding: 12px 30px;
+
+            border-radius: 30px;
+
+            border: 1px solid
+                rgba(255,255,255,0.4);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f2f3f5,
+                    #858993
+                );
+
+            color: #101117;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.3s;
+        }
+
+        .reveal:hover {
+
+            transform: scale(1.07);
+
+            box-shadow:
+                0 0 25px
+                rgba(255,255,255,0.5);
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+
+            position: relative;
+
+            z-index: 5;
+
+            text-align: center;
+
+            padding: 35px 20px;
+
+            margin-top: 20px;
+
+            border-top:
+
+                1px solid
+                rgba(255,255,255,0.2);
+
+            background:
+                rgba(0,0,0,0.35);
+
+            color: #9da1ab;
+
+            letter-spacing: 1px;
+        }
+
+        footer strong {
+
+            color: white;
+
+            display: block;
+
+            margin-top: 8px;
+
+            letter-spacing: 2px;
+        }
+
+        .footer-stars {
+
+            margin-top: 12px;
+
+            color: #dfe1e6;
+
+            letter-spacing: 10px;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media(max-width:600px) {
+
+            header h1 {
+
+                font-size: 38px;
+
+                letter-spacing: 7px;
+            }
+
+            .moon {
+
+                width: 130px;
+                height: 130px;
+            }
+
+            .moon-area {
+
+                height: 230px;
+            }
+
+            .wheel {
+
+                width: 350px;
+                height: 350px;
+            }
+
+            .zodiac {
+
+                width: 55px;
+                height: 55px;
+            }
+
+            .zodiac .symbol {
+
+                font-size: 21px;
+            }
+
+            .zodiac small {
+
+                display: none;
+            }
+
+            .z1  { top: -27px; left: calc(50% - 27px); }
+            .z2  { top: 15px; right: 60px; }
+            .z3  { top: 70px; right: 0; }
+            .z4  { top: calc(50% - 27px); right: -27px; }
+            .z5  { bottom: 70px; right: 0; }
+            .z6  { bottom: 15px; right: 60px; }
+            .z7  { bottom: -27px; left: calc(50% - 27px); }
+            .z8  { bottom: 15px; left: 60px; }
+            .z9  { bottom: 70px; left: 0; }
+            .z10 { top: calc(50% - 27px); left: -27px; }
+            .z11 { top: 70px; left: 0; }
+            .z12 { top: 15px; left: 60px; }
+
+            .center {
+
+                width: 130px;
+                height: 130px;
+            }
+
+            #centerSymbol {
+
+                font-size: 35px;
+            }
+
+            #centerName {
+
+                font-size: 12px;
+            }
+
+            .horoscope {
+
+                padding: 25px 18px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- STAR BACKGROUND -->
+
+    <div class="stars"></div>
+
+    <div class="stars2"></div>
+
+    <div class="stars3"></div>
+
+    <div class="shooting-star"></div>
+
+
+    <!-- HEADER -->
+
+    <header>
+
+        <div class="logo">
+            ✦ CELESTIAL OBSERVATORY ✦
+        </div>
+
+        <h1>ASTRA</h1>
+
+        <p>
+            THE LANGUAGE OF THE STARS
+        </p>
+
+    </header>
+
+
+    <!-- MOON -->
+
+    <div class="moon-area">
+
+        <div class="moon"></div>
+
+    </div>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+        <div class="subtitle">
+
+            ROTATE THROUGH THE ZODIAC
+
+        </div>
+
+
+        <!-- 3D ZODIAC -->
+
+        <div class="wheel">
+
+
+            <div class="zodiac z1"
+                 data-name="ARIES"
+                 data-symbol="♈"
+                 data-message="Your courage is your greatest strength today. Take the first step toward something you have been waiting for.">
+
+                <div class="symbol">♈</div>
+                <small>ARIES</small>
+
+            </div>
+
+
+            <div class="zodiac z2"
+                 data-name="TAURUS"
+                 data-symbol="♉"
+                 data-message="Patience will reward you. Stay focused on your plans and trust that steady progress is still progress.">
+
+                <div class="symbol">♉</div>
+                <small>TAURUS</small>
+
+            </div>
+
+
+            <div class="zodiac z3"
+                 data-name="GEMINI"
+                 data-symbol="♊"
+                 data-message="A conversation may bring an unexpected opportunity. Express your ideas clearly and confidently.">
+
+                <div class="symbol">♊</div>
+                <small>GEMINI</small>
+
+            </div>
+
+
+            <div class="zodiac z4"
+                 data-name="CANCER"
+                 data-symbol="♋"
+                 data-message="Listen to your intuition today. A calm mind will help you make the right decision.">
+
+                <div class="symbol">♋</div>
+                <small>CANCER</small>
+
+            </div>
+
+
+            <div class="zodiac z5"
+                 data-name="LEO"
+                 data-symbol="♌"
+                 data-message="Your confidence will attract positive attention. Let your natural leadership shine.">
+
+                <div class="symbol">♌</div>
+                <small>LEO</small>
+
+            </div>
+
+
+            <div class="zodiac z6"
+                 data-name="VIRGO"
+                 data-symbol="♍"
+                 data-message="Focus on the small details. Your careful planning can turn an ordinary opportunity into something valuable.">
+
+                <div class="symbol">♍</div>
+                <small>VIRGO</small>
+
+            </div>
+
+
+            <div class="zodiac z7"
+                 data-name="LIBRA"
+                 data-symbol="♎"
+                 data-message="Balance is your key today. Protect your peace and choose harmony whenever possible.">
+
+                <div class="symbol">♎</div>
+                <small>LIBRA</small>
+
+            </div>
+
+
+            <div class="zodiac z8"
+                 data-name="SCORPIO"
+                 data-symbol="♏"
+                 data-message="Your determination is powerful. Trust yourself and do not allow temporary difficulties to change your direction.">
+
+                <div class="symbol">♏</div>
+                <small>SCORPIO</small>
+
+            </div>
+
+
+            <div class="zodiac z9"
+                 data-name="SAGITTARIUS"
+                 data-symbol="♐"
+                 data-message="A new experience may expand your perspective. Keep your mind open to learning something unexpected.">
+
+                <div class="symbol">♐</div>
+                <small>SAGITTARIUS</small>
+
+            </div>
+
+
+            <div class="zodiac z10"
+                 data-name="CAPRICORN"
+                 data-symbol="♑"
+                 data-message="Your discipline is creating a strong foundation. Continue your efforts and trust your long-term vision.">
+
+                <div class="symbol">♑</div>
+                <small>CAPRICORN</small>
+
+            </div>
+
+
+            <div class="zodiac z11"
+                 data-name="AQUARIUS"
+                 data-symbol="♒"
+                 data-message="Your unique ideas can create something special. Do not be afraid to think differently.">
+
+                <div class="symbol">♒</div>
+                <small>AQUARIUS</small>
+
+            </div>
+
+
+            <div class="zodiac z12"
+                 data-name="PISCES"
+                 data-symbol="♓"
+                 data-message="Your imagination is especially strong today. Follow your dreams while keeping one foot on the ground.">
+
+                <div class="symbol">♓</div>
+                <small>PISCES</small>
+
+            </div>
+
+
+            <!-- CENTER -->
+
+            <div class="center">
+
+                <div id="centerSymbol">
+                    ✦
+                </div>
+
+                <div id="centerName">
+                    ASTRA
+                </div>
+
+                <div id="centerHint">
+                    SELECT A SIGN
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- HOROSCOPE -->
+
+        <section class="horoscope">
+
+            <h2>
+                ✦ DAILY COSMIC READING ✦
+            </h2>
+
+            <div id="horoscopeTitle">
+                Your Stars Await
+            </div>
+
+            <p id="message">
+
+                Select a zodiac symbol from the
+                celestial wheel to reveal your horoscope.
+
+            </p>
+
+            <button class="reveal">
+
+                REVEAL MY HOROSCOPE
+
+            </button>
+
+        </section>
+
+
+    </main>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+
+        <p>
+            ASTRA • Astrology & Horoscope
+        </p>
+
+        <strong>
+            Register No: URK24CS1065
+        </strong>
+
+        <div class="footer-stars">
+            ✦ ✧ ✦ ✧ ✦
+        </div>
+
+    </footer>
+
+
+    <!-- =========================
+         jQUERY
+    ========================== -->
+
+    <script>
+
+        $(document).ready(function () {
+
+
+            let selectedSign = "";
+
+            let selectedMessage = "";
+
+
+            /* -------------------------
+               ZODIAC CLICK
+            ------------------------- */
+
+            $(".zodiac").click(function () {
+
+
+                selectedSign =
+                    $(this).data("name");
+
+
+                selectedMessage =
+                    $(this).data("message");
+
+
+                let symbol =
+                    $(this).data("symbol");
+
+
+                /* Stop wheel temporarily */
+
+                $(".wheel").css(
+                    "animation-play-state",
+                    "paused"
+                );
+
+
+                /* Change center */
+
+                $("#centerSymbol")
+                    .hide()
+                    .text(symbol)
+                    .fadeIn(500);
+
+
+                $("#centerName")
+                    .hide()
+                    .text(selectedSign)
+                    .fadeIn(500);
+
+
+                $("#centerHint")
+                    .text("SIGN SELECTED");
+
+
+                /* Change horoscope heading */
+
+                $("#horoscopeTitle")
+                    .stop(true, true)
+                    .fadeOut(200, function () {
+
+                        $(this)
+                            .text(selectedSign)
+                            .fadeIn(500);
+
+                    });
+
+
+                /* Change message */
+
+                $("#message")
+                    .stop(true, true)
+                    .fadeOut(200, function () {
+
+                        $(this)
+                            .text(
+                                "Your zodiac sign has been selected. Click the button below to reveal your cosmic reading."
+                            )
+                            .fadeIn(500);
+
+                    });
+
+
+                /* Scroll */
+
+                $("html, body").animate({
+
+                    scrollTop:
+                        $(".horoscope").offset().top - 40
+
+                }, 700);
+
+            });
+
+
+            /* -------------------------
+               REVEAL BUTTON
+            ------------------------- */
+
+            $(".reveal").click(function () {
+
+
+                if (selectedSign === "") {
+
+                    alert(
+                        "Please select a zodiac sign from the wheel first."
+                    );
+
+                    return;
+
+                }
+
+
+                $("#message")
+                    .fadeOut(300, function () {
+
+                        $(this)
+                            .text(selectedMessage)
+                            .fadeIn(900);
+
+                    });
+
+
+                $("#horoscopeTitle")
+                    .css(
+                        "text-shadow",
+                        "0 0 25px white"
+                    );
+
+
+                /* Button animation */
+
+                $(this)
+                    .text("✦ HOROSCOPE REVEALED ✦")
+                    .delay(1500)
+                    .queue(function (next) {
+
+                        $(this)
+                            .text(
+                                "REVEAL MY HOROSCOPE"
+                            );
+
+                        next();
+
+                    });
+
+            });
+
+
+            /* -------------------------
+               MOUSE PARALLAX
+            ------------------------- */
+
+            $(document).mousemove(function (event) {
+
+
+                let x =
+                    (event.clientX /
+                    $(window).width() - 0.5) * 10;
+
+
+                let y =
+                    (event.clientY /
+                    $(window).height() - 0.5) * 10;
+
+
+                $(".moon").css(
+                    "transform",
+                    "translate(" + x + "px," +
+                    y + "px)"
+                );
+
+
+                $(".wheel").css(
+                    "margin-left",
+                    "calc(50% + " + x * 0.5 + "px)"
+                );
+
+            });
+
+
+        });
+
+    </script>
+
+
+</body>
+
+</html>
+```
